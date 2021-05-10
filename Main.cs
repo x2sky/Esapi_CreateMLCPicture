@@ -2,7 +2,11 @@
 ///This program creates the sliding window MLC fields that deliver a dose pattern of the input picture//
 ///It contains a user control window that browse the picture file, as well as setting the output image dimension at the iso center plane.
 ///It creates four beams with different collimator angles, attaches the fluence, computes the MLC pattern and dose.
-///  
+///
+///--version 1.0.0.2
+///Set beams' iso center to iso center of the first beam, instead of (0,0,0)
+///Becket Hui 2020/05
+///
 ///--version 1.0.0.1
 ///Becket Hui 2021/05
 //////////////////////////////////////////////////////////////////////
@@ -17,8 +21,8 @@ using VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
 
 // TODO: Replace the following version attributes by creating AssemblyInfo.cs. You can do this in the properties of the Visual Studio project.
-[assembly: AssemblyVersion("1.0.0.1")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
+[assembly: AssemblyVersion("1.0.0.2")]
+[assembly: AssemblyFileVersion("1.0.0.2")]
 [assembly: AssemblyInformationalVersion("1.0")]
 
 // TODO: Uncomment the following line if the script requires write access.

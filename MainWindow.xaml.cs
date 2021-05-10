@@ -29,6 +29,7 @@ namespace createMLCPicture
     {
         private ExternalPlanSetup currPln;
         private ExternalBeamMachineParameters currMachParam;
+        private VVector currIsoCtr;
         public MainWindow(ScriptContext context)
         {
             InitializeComponent();
@@ -45,7 +46,8 @@ namespace createMLCPicture
                 }
             }
             currMachParam = new ExternalBeamMachineParameters(currBm.TreatmentUnit.Id.ToString(), energy, currBm.DoseRate, "STATIC", null);
-        }
+            currIsoCtr = currBm.IsocenterPosition;
+    }
         //numeric input only for picture height and width
         private void NumberValidation(object sender, TextCompositionEventArgs e)
         {
@@ -114,7 +116,7 @@ namespace createMLCPicture
                 return;
             }
             // Create fields for the following collimator angles //
-            CreateMLCFields mlcFld = new CreateMLCFields(currPln, currMachParam, imgFcty, picWidth, picLength);
+            CreateMLCFields mlcFld = new CreateMLCFields(currPln, currMachParam, currIsoCtr, imgFcty, picWidth, picLength);
             Single[] collAngs = mlcFld.getRotateAngles();
             foreach (float ang in collAngs)
             {

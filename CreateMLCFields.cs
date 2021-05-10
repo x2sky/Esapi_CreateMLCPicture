@@ -8,7 +8,11 @@
 ///     createMlcField(flncMtx, rotAng) -- create the MLC field from fluence matrix and collimator angle
 ///     computeDose() -- compute dose
 ///     convertImgToArr(Bitmap img) -- convert image to 2D array
-///  
+///
+///--version 1.0.0.2
+///Set beams' iso center to iso center of the first beam, instead of (0,0,0)
+///Becket Hui 2020/05
+///
 ///--version 1.0.0.1
 ///Becket Hui 2020/05
 //////////////////////////////////////////////////////////////////////
@@ -30,16 +34,18 @@ namespace createMLCPicture
     {
         private static ExternalPlanSetup currPln;
         private static ExternalBeamMachineParameters currMachParam;
+        private static VVector currIsoCtr;
         private static LMCVOptions vlmcOpt = new LMCVOptions(false);  
         private ImageFactory imgFcty;
         private double flncRes = 2.5; // fluence resolution in mm
         public double maxGy = 0.5; // max dose at 5 cm depth for each field
         public double pddFctr = 0.75; // conversion factor to convert dose from 5 cm depth to 10 cm depth
         public int xDim, yDim; // pixel dimensions of the fluence map
-        public CreateMLCFields(ExternalPlanSetup pln, ExternalBeamMachineParameters machParam, ImageFactory img, double picWidth, double picLength)
+        public CreateMLCFields(ExternalPlanSetup pln, ExternalBeamMachineParameters machParam, VVector isoCtr, ImageFactory img, double picWidth, double picLength)
         {
             currPln = pln;
             currMachParam = machParam;
+            currIsoCtr = isoCtr;
             imgFcty = img;
             // Resize image based on input pic length and width //
             double nPxWidth = Math.Floor(picWidth / flncRes);  // number of 2.5mm pixels in planned picture width
@@ -149,7 +155,7 @@ namespace createMLCPicture
             // Create fluence
             Fluence mlcFlnc = new Fluence(flncMtx, xOrg, yOrg);
             // Add beam
-            Beam currBm = currPln.AddMLCBeam(currMachParam, new float[2, 60], new VRect<double>(-50.0, -50.0, 50.0, 50.0), rotAng, 0.0, 0.0, new VVector(0, 0, 0));
+            Beam currBm = currPln.AddMLCBeam(currMachParam, new float[2, 60], new VRect<double>(-50.0, -50.0, 50.0, 50.0), rotAng, 0.0, 0.0, currIsoCtr);
             currBm.SetOptimalFluence(mlcFlnc);
             currPln.CalculateLeafMotions(vlmcOpt);
         }
